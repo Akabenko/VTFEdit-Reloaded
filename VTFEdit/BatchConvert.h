@@ -789,7 +789,7 @@ namespace VTFEdit
 													}
 												}
 												std::string vtfSuffix = msclr::interop::marshal_as<std::string>(baseTexPrefix);
-												int period = vtfSuffix.find_last_of('.');
+												int period = int(vtfSuffix.find_last_of('.'));
 												baseTexPrefix = baseTexPrefix->Remove(period); // Remove '.vtf' extension from basetexture as it's not needed.
 												this->VMTOptions->AddVMTStringNode(VMTFile, "$basetexture", baseTexPrefix);
 											}

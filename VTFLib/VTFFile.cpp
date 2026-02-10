@@ -191,24 +191,17 @@ vlBool CVTFFile::Create(vlUInt uiWidth, vlUInt uiHeight, vlUInt uiFrames, vlUInt
 	// Check options.
 	//
 
-	// Check if width is valid (power of 2 and fits in a short).
-	if(!this->IsMultipleOfFour(uiWidth) || uiWidth > 0xffff)
+	// Check if width is valid. Cannot be 0, is either a multiple of 4 or power of 2, and not greater than 65535.
+	if ( uiWidth <= 0 || ( !this->IsPowerOfTwo(uiWidth) && !this->IsMultipleOfFour(uiWidth) ) || uiWidth > 0xffff )
 	{
-		// 2 is valid since it's a power of 2, but I don't want to do more than this.
-		if (uiWidth == 0 || uiWidth != 2)
-		{
-			LastError.SetFormatted("Invalid image width %u. Width must be a power of two or multiple of four.", uiWidth);
-		}
+		LastError.SetFormatted("Invalid image width %u. Width must be a power of two or multiple of four.", uiWidth);
 		return vlFalse;
 	}
 
-	// Check if height is valid (power of 2 and fits in a short).
-	if(!this->IsMultipleOfFour(uiHeight) || uiHeight > 0xffff)
+	// Check if height is valid. Cannot be 0, is either a multiple of 4 or power of 2, and not greater than 65535.
+	if ( uiHeight <= 0 || ( !this->IsPowerOfTwo(uiHeight) && !this->IsMultipleOfFour(uiHeight) ) || uiHeight > 0xffff )
 	{
-		if (uiHeight == 0 || uiHeight == 2)
-		{
-			LastError.SetFormatted("Invalid image height %u. Height must be a power of two or multiple of four.", uiHeight);
-		}
+		LastError.SetFormatted("Invalid image height %u. Height must be a power of two or multiple of four.", uiHeight);
 		return vlFalse;
 	}
 
@@ -1762,7 +1755,8 @@ vlBool CVTFFile::GetSupportsResources() const
 	if(!this->IsLoaded())
 		return vlFalse;
 
-	return this->Header->Version[0] > VTF_MAJOR_VERSION || (this->Header->Version[0] == VTF_MAJOR_VERSION && this->Header->Version[1] >= VTF_MINOR_VERSION_MIN_RESOURCE);
+	// Version 7.3 and higher
+	return this->Header->Version[0] == 7 && this->Header->Version[1] > 2;
 }
 
 vlUInt CVTFFile::GetResourceCount() const
@@ -2022,7 +2016,7 @@ vlBool CVTFFile::GenerateMipmaps(vlUInt uiFace, vlUInt uiFrame, VTFMipmapFilter 
 	if(!this->IsLoaded())
 		return vlFalse;
 
-	auto formatInfo = GetImageFormatInfo(GetFormat());
+	SVTFImageFormatInfo formatInfo = GetImageFormatInfo(GetFormat());
 	VTFImageFormat actualFormat = GetFormat();
 	vlByte* lpData = (vlByte*)GetData(uiFrame, uiFace, 0, 0);
 	bool bConverted = false;
@@ -2040,10 +2034,10 @@ vlBool CVTFFile::GenerateMipmaps(vlUInt uiFace, vlUInt uiFrame, VTFMipmapFilter 
 		formatInfo = GetImageFormatInfo(actualFormat);
 	}
 
-	auto uiWidth = GetWidth();
-	auto uiHeight = GetHeight();
-	auto uiMipWidth = uiWidth >> 1;
-	auto uiMipHeight = uiHeight >> 1;
+	vlUInt uiWidth = GetWidth();
+	vlUInt uiHeight = GetHeight();
+	vlUInt uiMipWidth = uiWidth >> 1;
+	vlUInt uiMipHeight = uiHeight >> 1;
 
 	// Alloc a working buffer that will fit all of our mips
 	vlByte* lpWorkBuffer = new vlByte[uiMipWidth * uiMipHeight * formatInfo.uiBytesPerPixel];
@@ -2052,8 +2046,7 @@ vlBool CVTFFile::GenerateMipmaps(vlUInt uiFace, vlUInt uiFrame, VTFMipmapFilter 
 	stbir_datatype iDataType = STBIR_TYPE_UINT8;
 	if (actualFormat == IMAGE_FORMAT_RGB323232F || actualFormat == IMAGE_FORMAT_RGBA32323232F)
 		iDataType = STBIR_TYPE_FLOAT;
-	else if (actualFormat == IMAGE_FORMAT_RGBA16161616 || actualFormat == IMAGE_FORMAT_RGBA16161616 || 
-			actualFormat == IMAGE_FORMAT_RGBA16161616F)
+	else if (actualFormat == IMAGE_FORMAT_RGBA16161616 || actualFormat == IMAGE_FORMAT_RGBA16161616F)
 		iDataType = STBIR_TYPE_UINT16;
 
 	int iNumChannels = 0;
