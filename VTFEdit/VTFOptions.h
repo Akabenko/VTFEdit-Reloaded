@@ -17,7 +17,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-#define X86_64
 #pragma once
 
 using namespace System;
@@ -371,22 +370,6 @@ namespace VTFEdit
 			// 
 			this->cboFormat->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->cboFormat->Font = ( gcnew System::Drawing::Font( L"Microsoft Sans Serif", 8 ) );
-			#if defined(X86_64)
-			this->cboFormat->Items->AddRange(gcnew cli::array< System::Object^  >(36) { // 27
-				L"RGBA8888", L"ABGR8888", L"RGB888", L"BGR888",
-					L"RGB565", L"I8", L"IA88", L"P8 (Not supported)", L"A8",
-					L"RGB888 Bluescreen", L"BGR888 Bluescreen", L"ARGB8888", L"BGRA8888",
-					L"DXT1", L"DXT3", L"DXT5", L"BGRX8888", L"BGR565", L"BGRX5551",
-					L"BGRA4444", L"DXT1 With One Bit Alpha", L"BGRA5551", L"UV88",
-					L"UVWQ8888", L"RGBA16161616F", L"RGBA16161616", L"UVLX8888",
-
-					L"R32F (Not supported)", L"RGB323232F (Not supported)",
-					L"RGBA32323232F (Not supported)", L"RG1616F (Not supported)", L"RG3232F (Not supported)",
-					L"RGBX8888 (Not supported)", L"NV_NULL (Not supported)",
-					L"ATI2N", L"ATI1N"
-
-			});
-			#else
 			this->cboFormat->Items->AddRange( gcnew cli::array< System::Object ^  >( 39 ) { // 27
 				L"RGBA8888", L"ABGR8888", L"RGB888", L"BGR888",
 					L"RGB565", L"I8", L"IA88", L"P8 (Not supported)", L"A8",
@@ -395,13 +378,14 @@ namespace VTFEdit
 					L"BGRA4444", L"DXT1 With One Bit Alpha", L"BGRA5551", L"UV88",
 					L"UVWQ8888", L"RGBA16161616F", L"RGBA16161616", L"UVLX8888",
 					
+					// TODO: remove
 					L"R32F (Not supported)", L"RGB323232F (Not supported)",
 					L"RGBA32323232F (Not supported)", L"D16 (Not supported)", L"D24S8 (Not supported)",
 					L"INTZ (Not supported)", L"RAWZ (Not supported)", L"DF16 (Not supported)", L"DF24 (Not supported)", L"NULL (Not supported)",
-					L"ATI2N", L"ATI1N"
+					//
 
+					L"ATI1N", L"ATI2N"
 			} );
-			#endif
 			this->cboFormat->Location = System::Drawing::Point( 78, 15 );
 			this->cboFormat->Name = L"cboFormat";
 			this->cboFormat->Size = System::Drawing::Size( 125, 21 );
@@ -481,22 +465,6 @@ namespace VTFEdit
 			// 
 			this->cboAlphaFormat->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->cboAlphaFormat->Font = ( gcnew System::Drawing::Font( L"Microsoft Sans Serif", 8 ) );
-			#if defined(X86_64)
-			this->cboAlphaFormat->Items->AddRange(gcnew cli::array< System::Object^  >(36) {
-				L"RGBA8888", L"ABGR8888", L"RGB888", L"BGR888",
-				L"RGB565", L"I8", L"IA88", L"P8 (Not supported)", L"A8",
-				L"RGB888 Bluescreen", L"BGR888 Bluescreen", L"ARGB8888", L"BGRA8888",
-				L"DXT1", L"DXT3", L"DXT5", L"BGRX8888", L"BGR565", L"BGRX5551",
-				L"BGRA4444", L"DXT1 With One Bit Alpha", L"BGRA5551", L"UV88",
-				L"UVWQ8888", L"RGBA16161616F", L"RGBA16161616", L"UVLX8888",
-
-				L"R32F (Not supported)", L"RGB323232F (Not supported)",
-				L"RGBA32323232F (Not supported)", L"RG1616F (Not supported)", L"RG3232F (Not supported)",
-				L"RGBX8888 (Not supported)", L"NV_NULL (Not supported)",
-				L"ATI2N", L"ATI1N"
-
-			});
-			#else
 			this->cboAlphaFormat->Items->AddRange(gcnew cli::array< System::Object^  >(39) {
 				L"RGBA8888", L"ABGR8888", L"RGB888", L"BGR888",
 				L"RGB565", L"I8", L"IA88", L"P8 (Not supported)", L"A8",
@@ -505,13 +473,14 @@ namespace VTFEdit
 				L"BGRA4444", L"DXT1 With One Bit Alpha", L"BGRA5551", L"UV88",
 				L"UVWQ8888", L"RGBA16161616F", L"RGBA16161616", L"UVLX8888",
 
+				// TODO: remove
 				L"R32F (Not supported)", L"RGB323232F (Not supported)",
 				L"RGBA32323232F (Not supported)", L"D16 (Not supported)", L"D24S8 (Not supported)",
 				L"INTZ (Not supported)", L"RAWZ (Not supported)", L"DF16 (Not supported)", L"DF24 (Not supported)", L"NULL (Not supported)",
-				L"ATI1N", L"ATI2N"
+				//
 
+				L"ATI1N", L"ATI2N"
 			});
-			#endif
 			this->cboAlphaFormat->Location = System::Drawing::Point( 78, 34 );
 			this->cboAlphaFormat->Name = L"cboAlphaFormat";
 			this->cboAlphaFormat->Size = System::Drawing::Size( 125, 21 );
