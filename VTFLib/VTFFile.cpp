@@ -9,8 +9,6 @@
  * version.
  */
 
-#define X86_64
-
 #include <algorithm>
 #include "VTFLib.h"
 #include "VTFFile.h"
@@ -975,6 +973,17 @@ vlBool CVTFFile::Load(IO::Readers::IReader* Reader, vlBool bHeaderOnly)
 			return vlTrue;
 		}
 
+		// new vtf version support
+		if (this->Header->ImageFormat == IMAGE_FORMAT_ATI_DST16)
+		{
+			this->Header->ImageFormat = IMAGE_FORMAT_ATI2N;
+		}
+
+		if (this->Header->ImageFormat == IMAGE_FORMAT_ATI_DST24)
+		{
+			this->Header->ImageFormat = IMAGE_FORMAT_ATI1N;
+		}
+ 
 		// work out how big out buffers need to be
 		this->uiImageBufferSize = this->ComputeImageSize(this->Header->Width, this->Header->Height, this->Header->Depth, this->Header->MipCount, this->Header->ImageFormat) * this->GetFaceCount() * this->GetFrameCount();
 
@@ -1141,11 +1150,42 @@ vlBool CVTFFile::Save(IO::Writers::IWriter *Writer) const
 		if(!Writer->Open())
 			throw 0;
 
+		tagVTFImageFormat current_format = this->Header->ImageFormat;
+
+		// old version VTF support
+		if (current_format == IMAGE_FORMAT_ATI_DST16 && this->Header->Version[1] < VTF_MINOR_VERSION)
+		{
+			this->Header->ImageFormat = IMAGE_FORMAT_ATI2N;
+		}
+
+		if (current_format == IMAGE_FORMAT_ATI_DST24 && this->Header->Version[1] < VTF_MINOR_VERSION)
+		{
+			this->Header->ImageFormat = IMAGE_FORMAT_ATI1N;
+		}
+
+		bool new_ati = false;
+
+		// new version VTF support
+		if (current_format == IMAGE_FORMAT_ATI2N && this->Header->Version[1] >= VTF_MINOR_VERSION)
+		{
+			this->Header->ImageFormat = IMAGE_FORMAT_ATI_DST16;
+			new_ati = true;
+		}
+
+		if (current_format == IMAGE_FORMAT_ATI1N && this->Header->Version[1] >= VTF_MINOR_VERSION)
+		{
+			this->Header->ImageFormat = IMAGE_FORMAT_ATI_DST24;
+			new_ati = true;
+		}
+
 		// Write the header.
 		if(Writer->Write(this->Header, this->Header->HeaderSize) != this->Header->HeaderSize)
 		{
 			throw 0;
 		}
+
+		// back format
+		if (new_ati) this->Header->ImageFormat = current_format;
 
 		if(this->GetSupportsResources())
 		{
@@ -2597,15 +2637,6 @@ static SVTFImageFormatInfo VTFImageFormatInfo[] =
 	{ "R32F",				 32,  4, 32,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_R32F				
 	{ "RGB323232F",			 96, 12, 32, 32, 32,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_RGB323232F			
 	{ "RGBA32323232F",		128, 16, 32, 32, 32, 32, vlFalse,  vlTrue },		// IMAGE_FORMAT_RGBA32323232F		
-
-	#if defined(X86_64)
-	{ "RG1616F",			4,	16, 16, 0,	0,	0, vlFalse, vlTrue },			// IMAGE_FORMAT_RG1616F
-	{ "RG3232F",			8,	32, 32, 0,	0,	0, vlFalse, vlTrue },			// IMAGE_FORMAT_RG3232F
-	{ "RGBX8888",			4,	8,	8,	8,	0,	0, vlFalse, vlFalse },			// IMAGE_FORMAT_RGBX8888
-	{ "NULL",				32, 4,  0,  0,  0,  0, vlFalse, vlFalse },			// IMAGE_FORMAT_NV_NULL
-	{ "ATI2N",				8,  0,  0,  0,  0,  0, vlTrue,  vlTrue  }, 			// IMAGE_FORMAT_ATI2N
-	{ "ATI1N",				4,  0,  0,  0,  0,  0, vlTrue,  vlTrue  },			// IMAGE_FORMAT_ATI1N
-	#else
 	{ "nVidia DST16",		 16,  2,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_NV_DST16			
 	{ "nVidia DST24",		 24,  3,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_NV_DST24			
 	{ "nVidia INTZ",		 32,  4,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_NV_INTZ				
@@ -2633,8 +2664,6 @@ static SVTFImageFormatInfo VTFImageFormatInfo[] =
 	{ "LE BGRX8888",         32,  4,  8,  8,  8,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_LE_BGRX8888
 	{ "LE BGRA8888",		 32,  4,  8,  8,  8,  8, vlFalse,  vlTrue }			// IMAGE_FORMAT_LE_BGRA8888
 	*/
-	#endif
-	
 };
 
 SVTFImageFormatInfo const &CVTFFile::GetImageFormatInfo(VTFImageFormat ImageFormat)
@@ -3118,15 +3147,6 @@ static SVTFImageConvertInfo VTFImageConvertInfo[] =
 	{ 	 32,  4, 32,  0,  0,  0,	 0,	-1,	-1,	-1, vlFalse, vlFalse,	NULL,	NULL,		IMAGE_FORMAT_R32F},
 	{ 	 96, 12, 32, 32, 32,  0,	 0,	 1,	 2,	-1, vlFalse, vlFalse,	NULL,	NULL,		IMAGE_FORMAT_RGB323232F},
 	{	128, 16, 32, 32, 32, 32,	 0,	 1,	 2,	 3, vlFalse, vlFalse,	NULL,	NULL,		IMAGE_FORMAT_RGBA32323232F},
-
-	#if defined(X86_64)
-	{	  4,  16, 16, 0,  0,  0,	-1,	-1,	-1,	-1,	vlFalse,  vlTrue,	NULL,	NULL,		IMAGE_FORMAT_RG1616F},
-	{	  8,  32, 32, 0,  0,  0,	-1,	-1,	-1,	-1,	vlFalse,  vlTrue,	NULL,	NULL,		IMAGE_FORMAT_RG3232F},
-	{	  4,  8,  8,  8,  0,  0,	-1,	-1,	-1,	-1,	vlFalse, vlFalse,	NULL,	NULL,		IMAGE_FORMAT_RGBX8888},
-	{	 32,  4,  0,  0,  0,  0,	-1,	-1,	-1,	-1, vlFalse, vlFalse,	NULL,	NULL,		IMAGE_FORMAT_NV_NULL},
-	{     8,  0,  0,  0,  0,  0,	-1, -1, -1, -1,	 vlTrue,  vlTrue,	NULL,	NULL,		IMAGE_FORMAT_ATI2N},
-	{	  4,  0,  0,  0,  0,  0,	-1, -1, -1, -1,	 vlTrue,  vlTrue,	NULL,	NULL,		IMAGE_FORMAT_ATI1N},
-	#else
 	{    16,  2, 16,  0,  0,  0,	 0,	-1,	-1,	-1, vlFalse,  vlTrue,	NULL,	NULL,		IMAGE_FORMAT_NV_DST16},
 	{	 24,  3, 24,  0,  0,  0,	 0,	-1,	-1,	-1, vlFalse,  vlTrue,	NULL,	NULL,		IMAGE_FORMAT_NV_DST24},
 	{	 32,  4,  0,  0,  0,  0,	-1,	-1,	-1,	-1, vlFalse, vlFalse,	NULL,	NULL,		IMAGE_FORMAT_NV_INTZ},
@@ -3150,7 +3170,6 @@ static SVTFImageConvertInfo VTFImageConvertInfo[] =
 	{ 	 16,  2,  5,  5,  5,  0,	 2,	 1,	 0,	-1, vlFalse,  vlTrue,	NULL,	NULL,		IMAGE_FORMAT_LINEAR_BGRX5551},
 	{	  8,  1,  8,  8,  8,  0,	 0,	-1,	-1,	-1, vlFalse,  vlTrue,	ToLuminance,	FromLuminance,	IMAGE_FORMAT_LINEAR_I8},	
 	{	 64,  8, 16, 16, 16, 16,	 0,	 1,	 2,	 3, vlFalse,  vlTrue,	NULL,	NULL,		IMAGE_FORMAT_LINEAR_RGBA16161616}*/
-	#endif
 };
 
 // Get each channels shift and mask (for encoding and decoding).
@@ -3319,7 +3338,6 @@ vlBool ConvertTemplated(vlByte *lpSource, vlByte *lpDest, vlUInt uiWidth, vlUInt
 		if(uiSourceAMask)
 			SA = (vlUInt16)(Source >> (T)uiSourceAShift) & uiSourceAMask;	// isolate A channel
 
-		#if !defined(X86_64)
 		if (SourceInfo.Format == IMAGE_FORMAT_HDR_BGRA8888)
 		{
 			//If hdr, reduce colours to ldr range
@@ -3336,7 +3354,6 @@ vlBool ConvertTemplated(vlByte *lpSource, vlByte *lpDest, vlUInt uiWidth, vlUInt
 
 			SA = ~0;
 		}
-		#endif
 
 		if(SourceInfo.pFromTransform || DestInfo.pToTransform)
 		{
