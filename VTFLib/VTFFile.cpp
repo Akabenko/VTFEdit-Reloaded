@@ -973,7 +973,7 @@ vlBool CVTFFile::Load(IO::Readers::IReader* Reader, vlBool bHeaderOnly)
 			return vlTrue;
 		}
 
-		// new vtf version support
+		// New vtf version support.
 		if (this->Header->ImageFormat == IMAGE_FORMAT_ATI_DST16)
 		{
 			this->Header->ImageFormat = IMAGE_FORMAT_ATI2N;
@@ -3497,6 +3497,29 @@ vlBool CVTFFile::Convert(vlByte *lpSource, vlByte *lpDest, vlUInt uiWidth, vlUIn
 
 		if(bResult)
 		{
+			// Make .z layer as white for ATI2N.
+			if (SourceFormat == IMAGE_FORMAT_ATI2N)
+			{
+				vlByte* pDest = lpSourceRGBA;
+				for (vlUInt i = 0; i < uiWidth * uiHeight; i++)
+				{
+					pDest[2] = 255;
+					pDest += 4;
+				}
+			}
+
+			// Make .yz layers as black for ATI1N.
+			if (SourceFormat == IMAGE_FORMAT_ATI1N)
+			{
+				vlByte* pDest = lpSourceRGBA;
+				for (vlUInt i = 0; i < uiWidth * uiHeight; i++)
+				{
+					pDest[1] = 0;
+					pDest[2] = 0;
+					pDest += 4;
+				}
+			}
+
 			// compress the source or convert it to the dest format if it is not compressed
 			switch(DestFormat)
 			{
@@ -3513,6 +3536,8 @@ vlBool CVTFFile::Convert(vlByte *lpSource, vlByte *lpDest, vlUInt uiWidth, vlUIn
 				break;
 			}
 		}
+
+
 
 		// free temp data
 		if(lpSourceRGBA != lpSource)
