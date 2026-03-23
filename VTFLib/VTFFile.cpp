@@ -1152,7 +1152,7 @@ vlBool CVTFFile::Save(IO::Writers::IWriter *Writer) const
 
 		tagVTFImageFormat current_format = this->Header->ImageFormat;
 
-		// old version VTF support
+		// Old version VTF support
 		if (current_format == IMAGE_FORMAT_ATI_DST16 && this->Header->Version[1] < VTF_MINOR_VERSION)
 		{
 			this->Header->ImageFormat = IMAGE_FORMAT_ATI2N;
@@ -1165,7 +1165,7 @@ vlBool CVTFFile::Save(IO::Writers::IWriter *Writer) const
 
 		bool new_ati = false;
 
-		// new version VTF support
+		// New version VTF support
 		if (current_format == IMAGE_FORMAT_ATI2N && this->Header->Version[1] >= VTF_MINOR_VERSION)
 		{
 			this->Header->ImageFormat = IMAGE_FORMAT_ATI_DST16;
@@ -1184,7 +1184,7 @@ vlBool CVTFFile::Save(IO::Writers::IWriter *Writer) const
 			throw 0;
 		}
 
-		// back format
+		// Back format (Crash fix)
 		if (new_ati) this->Header->ImageFormat = current_format;
 
 		if(this->GetSupportsResources())
