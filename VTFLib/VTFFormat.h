@@ -31,6 +31,8 @@
 					- Image data (in relevant format)
 */
 
+#define X86_64
+
 #ifndef VTFFORMAT_H
 #define VTFFORMAT_H
 
@@ -89,6 +91,15 @@ typedef enum tagVTFImageFormat
 	IMAGE_FORMAT_R32F,						//!<  = Luminance - 32 bpp
 	IMAGE_FORMAT_RGB323232F,				//!<  = Red, Green, Blue - 96 bpp
 	IMAGE_FORMAT_RGBA32323232F,				//!<  = Red, Green, Blue, Alpha - 128 bpp
+
+	#if defined(X86_64)
+	IMAGE_FORMAT_RG1616F,
+	IMAGE_FORMAT_RG3232F,
+	IMAGE_FORMAT_RGBX8888,
+	IMAGE_FORMAT_NV_NULL,
+	IMAGE_FORMAT_ATI2N,
+	IMAGE_FORMAT_ATI1N,
+	#else
 	IMAGE_FORMAT_NV_DST16,
 	IMAGE_FORMAT_NV_DST24,					
 	IMAGE_FORMAT_NV_INTZ,
@@ -117,6 +128,7 @@ typedef enum tagVTFImageFormat
 	IMAGE_FORMAT_LE_BGRX8888,				//!<  = Blue, Green, Red, Unused - 32 bpp
 	IMAGE_FORMAT_LE_BGRA8888,				//!<  = Blue, Green, Red, Alpha - 32 bpp
 	*/
+	#endif
 	IMAGE_FORMAT_COUNT,
 	IMAGE_FORMAT_NONE = -1
 } VTFImageFormat;
