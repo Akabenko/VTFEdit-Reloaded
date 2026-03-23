@@ -1225,14 +1225,17 @@ namespace VTFEdit
 	{
 		VTFImageFormat get()
 		{
-			return (VTFImageFormat)this->cboFormat->SelectedIndex;
+			return (VTFImageFormat)safe_cast<FmtItem^>(this->cboFormat->SelectedItem)->Value;
 		}
 		void set(VTFImageFormat ImageFormat)
 		{
-			int iIndex = Convert::ToInt32(ImageFormat);
-			if (iIndex >= 0 && iIndex < this->cboFormat->Items->Count)
+			for each (FmtItem ^ item in this->cboFormat->Items)
 			{
-				this->cboFormat->SelectedIndex = iIndex;
+				if (item->Value == (int)ImageFormat)
+				{
+					this->cboFormat->SelectedItem = item;
+					return;
+				}
 			}
 		}
 	}
@@ -1241,14 +1244,18 @@ namespace VTFEdit
 	{
 		VTFImageFormat get()
 		{
-			return (VTFImageFormat)this->cboAlphaFormat->SelectedIndex;
+
+			return (VTFImageFormat)safe_cast<FmtItem^>(this->cboAlphaFormat->SelectedItem)->Value;
 		}
 		void set(VTFImageFormat ImageFormat)
 		{
-			int iIndex = Convert::ToInt32(ImageFormat);
-			if (iIndex >= 0 && iIndex < this->cboAlphaFormat->Items->Count)
+			for each (FmtItem ^ item in this->cboAlphaFormat->Items)
 			{
-				this->cboAlphaFormat->SelectedIndex = iIndex;
+				if (item->Value == (int)ImageFormat)
+				{
+					this->cboAlphaFormat->SelectedItem = item;
+					return;
+				}
 			}
 		}
 	}
@@ -1741,8 +1748,8 @@ namespace VTFEdit
 
 	private: System::Void btnReset_Click(System::Object^ sender, System::EventArgs^ e)
 	{
-		this->cboFormat->SelectedIndex = 13;
-		this->cboAlphaFormat->SelectedIndex = 15;
+		this->NormalFormat = IMAGE_FORMAT_DXT1;
+		this->AlphaFormat = IMAGE_FORMAT_DXT5;
 		this->cboTextureType->SelectedIndex = 0;
 
 		this->chkResize->Checked = true;
