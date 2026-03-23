@@ -1150,32 +1150,32 @@ vlBool CVTFFile::Save(IO::Writers::IWriter *Writer) const
 		if(!Writer->Open())
 			throw 0;
 
-		tagVTFImageFormat current_format = this->Header->ImageFormat;
+		tagVTFImageFormat fmt = this->Header->ImageFormat;
 
-		// Old version VTF support
-		if (current_format == IMAGE_FORMAT_ATI_DST16 && this->Header->Version[1] < VTF_MINOR_VERSION)
+		// Old version VTF support.
+		if (fmt == IMAGE_FORMAT_ATI_DST16 && this->Header->Version[1] < VTF_MINOR_VERSION)
 		{
 			this->Header->ImageFormat = IMAGE_FORMAT_ATI2N;
 		}
 
-		if (current_format == IMAGE_FORMAT_ATI_DST24 && this->Header->Version[1] < VTF_MINOR_VERSION)
+		if (fmt == IMAGE_FORMAT_ATI_DST24 && this->Header->Version[1] < VTF_MINOR_VERSION)
 		{
 			this->Header->ImageFormat = IMAGE_FORMAT_ATI1N;
 		}
 
-		bool new_ati = false;
+		bool ati = false;
 
-		// New version VTF support
-		if (current_format == IMAGE_FORMAT_ATI2N && this->Header->Version[1] >= VTF_MINOR_VERSION)
+		// New version VTF support.
+		if (fmt == IMAGE_FORMAT_ATI2N && this->Header->Version[1] >= VTF_MINOR_VERSION)
 		{
 			this->Header->ImageFormat = IMAGE_FORMAT_ATI_DST16;
-			new_ati = true;
+			ati = true;
 		}
 
-		if (current_format == IMAGE_FORMAT_ATI1N && this->Header->Version[1] >= VTF_MINOR_VERSION)
+		if (fmt == IMAGE_FORMAT_ATI1N && this->Header->Version[1] >= VTF_MINOR_VERSION)
 		{
 			this->Header->ImageFormat = IMAGE_FORMAT_ATI_DST24;
-			new_ati = true;
+			ati = true;
 		}
 
 		// Write the header.
@@ -1184,8 +1184,8 @@ vlBool CVTFFile::Save(IO::Writers::IWriter *Writer) const
 			throw 0;
 		}
 
-		// Back format (Crash fix)
-		if (new_ati) this->Header->ImageFormat = current_format;
+		// Back format (crash fix).
+		if (ati) this->Header->ImageFormat = fmt;
 
 		if(this->GetSupportsResources())
 		{
