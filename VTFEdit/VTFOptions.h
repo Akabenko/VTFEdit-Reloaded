@@ -1244,7 +1244,6 @@ namespace VTFEdit
 	{
 		VTFImageFormat get()
 		{
-
 			return (VTFImageFormat)safe_cast<FmtItem^>(this->cboAlphaFormat->SelectedItem)->Value;
 		}
 		void set(VTFImageFormat ImageFormat)
