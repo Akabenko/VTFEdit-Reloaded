@@ -2620,32 +2620,32 @@ static SVTFImageFormatInfo VTFImageFormatInfo[] =
 	{ "BGR888 Bluescreen",	 24,  3,  8,  8,  8,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_BGR888_BLUESCREEN
 	{ "ARGB8888",			 32,  4,  8,  8,  8,  8, vlFalse,  vlTrue },		// IMAGE_FORMAT_ARGB8888
 	{ "BGRA8888",			 32,  4,  8,  8,  8,  8, vlFalse,  vlTrue },		// IMAGE_FORMAT_BGRA8888
-	{ "DXT1",				  4,  0,  0,  0,  0,  0,  vlTrue,  vlTrue },		// IMAGE_FORMAT_DXT1			
+	{ "DXT1",				  4,  0,  0,  0,  0,  0,  vlTrue,  vlTrue },		// IMAGE_FORMAT_DXT1
 	{ "DXT3",				  8,  0,  0,  0,  0,  8,  vlTrue,  vlTrue },		// IMAGE_FORMAT_DXT3
-	{ "DXT5",				  8,  0,  0,  0,  0,  8,  vlTrue,  vlTrue },		// IMAGE_FORMAT_DXT5			
-	{ "BGRX8888",			 32,  4,  8,  8,  8,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_BGRX8888		
-	{ "BGR565",				 16,  2,  5,  6,  5,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_BGR565			
-	{ "BGRX5551",			 16,  2,  5,  5,  5,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_BGRX5551		
-	{ "BGRA4444",			 16,  2,  4,  4,  4,  4, vlFalse,  vlTrue },		// IMAGE_FORMAT_BGRA4444		
-	{ "DXT1 One Bit Alpha",	  4,  0,  0,  0,  0,  1,  vlTrue,  vlTrue },		// IMAGE_FORMAT_DXT1_ONEBITALPHA	
-	{ "BGRA5551",			 16,  2,  5,  5,  5,  1, vlFalse,  vlTrue },		// IMAGE_FORMAT_BGRA5551			
-	{ "UV88",				 16,  2,  8,  8,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_UV88				
-	{ "UVWQ8888",			 32,  4,  8,  8,  8,  8, vlFalse,  vlTrue },		// IMAGE_FORMAT_UVWQ8899			
-	{ "RGBA16161616F",	     64,  8, 16, 16, 16, 16, vlFalse,  vlTrue },		// IMAGE_FORMAT_RGBA16161616F		
-	{ "RGBA16161616",	     64,  8, 16, 16, 16, 16, vlFalse,  vlTrue },		// IMAGE_FORMAT_RGBA16161616		
-	{ "UVLX8888",			 32,  4,  8,  8,  8,  8, vlFalse,  vlTrue },		// IMAGE_FORMAT_UVLX8888			
-	{ "R32F",				 32,  4, 32,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_R32F				
-	{ "RGB323232F",			 96, 12, 32, 32, 32,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_RGB323232F			
-	{ "RGBA32323232F",		128, 16, 32, 32, 32, 32, vlFalse,  vlTrue },		// IMAGE_FORMAT_RGBA32323232F		
-	{ "nVidia DST16",		 16,  2,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_NV_DST16			
-	{ "nVidia DST24",		 24,  3,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_NV_DST24			
-	{ "nVidia INTZ",		 32,  4,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_NV_INTZ				
-	{ "nVidia RAWZ",		 32,  4,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_NV_RAWZ				
-	{ "ATI DST16",			 16,  2,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_ATI_DST16			
-	{ "ATI DST24",			 24,  3,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_ATI_DST24 35
-	{ "nVidia NULL",		 32,  4,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_NV_NULL 36
-	{ "ATI1N",				  4,  0,  0,  0,  0,  0,  vlTrue,  vlTrue },		// IMAGE_FORMAT_ATI1N 37
-	{ "ATI2N",				  8,  0,  0,  0,  0,  0,  vlTrue,  vlTrue },		// IMAGE_FORMAT_ATI2N 38
+	{ "DXT5",				  8,  0,  0,  0,  0,  8,  vlTrue,  vlTrue },		// IMAGE_FORMAT_DXT5
+	{ "BGRX8888",			 32,  4,  8,  8,  8,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_BGRX8888
+	{ "BGR565",				 16,  2,  5,  6,  5,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_BGR565
+	{ "BGRX5551",			 16,  2,  5,  5,  5,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_BGRX5551
+	{ "BGRA4444",			 16,  2,  4,  4,  4,  4, vlFalse,  vlTrue },		// IMAGE_FORMAT_BGRA4444
+	{ "DXT1 One Bit Alpha",	  4,  0,  0,  0,  0,  1,  vlTrue,  vlTrue },		// IMAGE_FORMAT_DXT1_ONEBITALPHA
+	{ "BGRA5551",			 16,  2,  5,  5,  5,  1, vlFalse,  vlTrue },		// IMAGE_FORMAT_BGRA5551
+	{ "UV88",				 16,  2,  8,  8,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_UV88
+	{ "UVWQ8888",			 32,  4,  8,  8,  8,  8, vlFalse,  vlTrue },		// IMAGE_FORMAT_UVWQ8899
+	{ "RGBA16161616F",	     64,  8, 16, 16, 16, 16, vlFalse,  vlTrue },		// IMAGE_FORMAT_RGBA16161616F
+	{ "RGBA16161616",	     64,  8, 16, 16, 16, 16, vlFalse,  vlTrue },		// IMAGE_FORMAT_RGBA16161616
+	{ "UVLX8888",			 32,  4,  8,  8,  8,  8, vlFalse,  vlTrue },		// IMAGE_FORMAT_UVLX8888
+	{ "R32F",				 32,  4, 32,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_R32F
+	{ "RGB323232F",			 96, 12, 32, 32, 32,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_RGB323232F
+	{ "RGBA32323232F",		128, 16, 32, 32, 32, 32, vlFalse,  vlTrue },		// IMAGE_FORMAT_RGBA32323232F
+	{ "nVidia DST16",		 16,  2,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_NV_DST16
+	{ "nVidia DST24",		 24,  3,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_NV_DST24
+	{ "nVidia INTZ",		 32,  4,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_NV_INTZ
+	{ "nVidia RAWZ",		 32,  4,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_NV_RAWZ
+	{ "ATI DST16",			 16,  2,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_ATI_DST16
+	{ "ATI DST24",			 24,  3,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_ATI_DST24
+	{ "nVidia NULL",		 32,  4,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_NV_NULL
+	{ "ATI1N",				  4,  0,  0,  0,  0,  0,  vlTrue,  vlTrue },		// IMAGE_FORMAT_ATI1N
+	{ "ATI2N",				  8,  0,  0,  0,  0,  0,  vlTrue,  vlTrue },		// IMAGE_FORMAT_ATI2N
 	{ "HDR_BGRA8888",		 32,  4,  8,  8,  8,  8, vlFalse,  vlTrue }			// IMAGE_FORMAT_BGRA8888
 	/*
 	{ "Xbox360 DST16",		 16,  0,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_X360_DST16
@@ -2682,25 +2682,25 @@ SVTFImageFormatInfo const &CVTFFile::GetImageFormatInfo(VTFImageFormat ImageForm
 //------------------------------------------------------------------------------------
 vlUInt CVTFFile::ComputeImageSize(vlUInt uiWidth, vlUInt uiHeight, vlUInt uiDepth, VTFImageFormat ImageFormat)
 {
-	switch (ImageFormat)
+	switch(ImageFormat)
 	{
 	case IMAGE_FORMAT_DXT1:
 	case IMAGE_FORMAT_DXT1_ONEBITALPHA:
 	case IMAGE_FORMAT_ATI1N:
-		if (uiWidth < 4 && uiWidth > 0)
+		if(uiWidth < 4 && uiWidth > 0)
 			uiWidth = 4;
 
-		if (uiHeight < 4 && uiHeight > 0)
+		if(uiHeight < 4 && uiHeight > 0)
 			uiHeight = 4;
 
 		return ((uiWidth + 3) / 4) * ((uiHeight + 3) / 4) * 8 * uiDepth;
 	case IMAGE_FORMAT_DXT3:
 	case IMAGE_FORMAT_DXT5:
 	case IMAGE_FORMAT_ATI2N:
-		if (uiWidth < 4 && uiWidth > 0)
+		if(uiWidth < 4 && uiWidth > 0)
 			uiWidth = 4;
 
-		if (uiHeight < 4 && uiHeight > 0)
+		if(uiHeight < 4 && uiHeight > 0)
 			uiHeight = 4;
 
 		return ((uiWidth + 3) / 4) * ((uiHeight + 3) / 4) * 16 * uiDepth;
@@ -2832,28 +2832,28 @@ vlUInt CVTFFile::ComputeDataOffset(vlUInt uiFrame, vlUInt uiFace, vlUInt uiSlice
 	vlUInt uiSliceCount = this->GetDepth();
 	vlUInt uiMipCount = this->GetMipmapCount();
 
-	if (uiFrame >= uiFrameCount)
+	if(uiFrame >= uiFrameCount)
 	{
 		uiFrame = uiFrameCount - 1;
 	}
 
-	if (uiFace >= uiFaceCount)
+	if(uiFace >= uiFaceCount)
 	{
 		uiFace = uiFaceCount - 1;
 	}
 
-	if (uiSlice >= uiSliceCount)
+	if(uiSlice >= uiSliceCount)
 	{
 		uiSlice = uiSliceCount - 1;
 	}
 
-	if (uiMipLevel >= uiMipCount)
+	if(uiMipLevel >= uiMipCount)
 	{
 		uiMipLevel = uiMipCount - 1;
 	}
 
 	// Transverse past all frames and faces of each mipmap (up to the requested one).
-	for (vlInt i = (vlInt)uiMipCount - 1; i > (vlInt)uiMipLevel; i--)
+	for(vlInt i = (vlInt)uiMipCount - 1; i > (vlInt)uiMipLevel; i--)
 	{
 		uiOffset += this->ComputeMipmapSize(this->Header->Width, this->Header->Height, this->Header->Depth, i, ImageFormat) * uiFrameCount * uiFaceCount;
 	}
@@ -3536,8 +3536,6 @@ vlBool CVTFFile::Convert(vlByte *lpSource, vlByte *lpDest, vlUInt uiWidth, vlUIn
 				break;
 			}
 		}
-
-
 
 		// free temp data
 		if(lpSourceRGBA != lpSource)
