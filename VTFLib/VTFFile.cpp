@@ -1107,7 +1107,7 @@ vlBool CVTFFile::Load(IO::Readers::IReader *Reader, vlBool bHeaderOnly)
 
 			// load the high-res data
 			Reader->Seek(uiImageDataOffset, FILE_BEGIN);
-			if (Reader->Read(this->lpImageData, this->uiImageBufferSize) != this->uiImageBufferSize)
+			if(Reader->Read(this->lpImageData, this->uiImageBufferSize) != this->uiImageBufferSize)
 			{
 				throw 0;
 			}
@@ -1116,7 +1116,7 @@ vlBool CVTFFile::Load(IO::Readers::IReader *Reader, vlBool bHeaderOnly)
 		// Fixup resource offsets for writing.
 		this->ComputeResources();
 	}
-	catch (...)
+	catch(...)
 	{
 		Reader->Close();
 
@@ -1185,7 +1185,7 @@ vlBool CVTFFile::Save(IO::Writers::IWriter *Writer) const
 		}
 
 		// Back format (crash fix).
-		if (ati) this->Header->ImageFormat = fmt;
+		if(ati) this->Header->ImageFormat = fmt;
 
 		if(this->GetSupportsResources())
 		{
