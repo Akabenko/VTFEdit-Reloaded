@@ -897,20 +897,20 @@ vlBool CVTFFile::Save(vlVoid *pUserData) const
 // Reader - The stream to read from.
 // bHeaderOnly - only read in the header if true (dont allocate and read image data in)
 // ------------------------------------------------------------------------------------
-vlBool CVTFFile::Load(IO::Readers::IReader* Reader, vlBool bHeaderOnly)
+vlBool CVTFFile::Load(IO::Readers::IReader *Reader, vlBool bHeaderOnly)
 {
 	this->Destroy();
 
 	try
 	{
-		if (!Reader->Open())
+		if(!Reader->Open())
 			throw 0;
 
 		// Get the size of the .vtf file.
 		vlUInt uiFileSize = Reader->GetStreamSize();
 
 		// Check we at least have enough bytes for a header.
-		if (uiFileSize < sizeof(SVTFFileHeader))
+		if(uiFileSize < sizeof(SVTFFileHeader))
 		{
 			LastError.Set("File is corrupt; file to small for it's header.");
 			throw 0;
@@ -920,24 +920,24 @@ vlBool CVTFFile::Load(IO::Readers::IReader* Reader, vlBool bHeaderOnly)
 
 		// read the file header
 		memset(&FileHeader, 0, sizeof(SVTFFileHeader));
-		if (Reader->Read(&FileHeader, sizeof(SVTFFileHeader)) != sizeof(SVTFFileHeader))
+		if(Reader->Read(&FileHeader, sizeof(SVTFFileHeader)) != sizeof(SVTFFileHeader))
 		{
 			throw 0;
 		}
 
-		if (memcmp(FileHeader.TypeString, "VTF\0", 4) != 0)
+		if(memcmp(FileHeader.TypeString, "VTF\0", 4) != 0)
 		{
 			LastError.Set("File signature does not match 'VTF'.");
 			throw 0;
 		}
 
-		if (FileHeader.Version[0] != VTF_MAJOR_VERSION || (FileHeader.Version[1] < 0 || FileHeader.Version[1] > VTF_MINOR_VERSION))
+		if(FileHeader.Version[0] != VTF_MAJOR_VERSION || (FileHeader.Version[1] < 0 || FileHeader.Version[1] > VTF_MINOR_VERSION))
 		{
 			LastError.SetFormatted("File version %u.%u does not match %d.%d to %d.%d.", FileHeader.Version[0], FileHeader.Version[1], VTF_MAJOR_VERSION, 0, VTF_MAJOR_VERSION, VTF_MINOR_VERSION);
 			throw 0;
 		}
 
-		if (FileHeader.HeaderSize > sizeof(SVTFHeader))
+		if(FileHeader.HeaderSize > sizeof(SVTFHeader))
 		{
 			LastError.SetFormatted("File header size %d B is larger than the %d B maximum expected.", FileHeader.HeaderSize, sizeof(SVTFHeader));
 			throw 0;
@@ -949,37 +949,37 @@ vlBool CVTFFile::Load(IO::Readers::IReader* Reader, vlBool bHeaderOnly)
 		memset(this->Header, 0, sizeof(SVTFHeader));
 
 		// read the header
-		if (Reader->Read(this->Header, FileHeader.HeaderSize) != FileHeader.HeaderSize)
+		if(Reader->Read(this->Header, FileHeader.HeaderSize) != FileHeader.HeaderSize)
 		{
 			throw 0;
 		}
 
-		if (this->Header->Version[0] < VTF_MAJOR_VERSION || (this->Header->Version[0] == VTF_MAJOR_VERSION && this->Header->Version[1] < VTF_MINOR_VERSION_MIN_VOLUME))
+		if(this->Header->Version[0] < VTF_MAJOR_VERSION || (this->Header->Version[0] == VTF_MAJOR_VERSION && this->Header->Version[1] < VTF_MINOR_VERSION_MIN_VOLUME))
 		{
 			// set depth if version is lower than 7.2
 			this->Header->Depth = 1;
 		}
 
-		if (!this->GetSupportsResources())
+		if(!this->GetSupportsResources())
 		{
 			// set resource count if version is lower than 7.3
 			this->Header->ResourceCount = 0;
 		}
 
 		// if we just want the header loaded, bail here
-		if (bHeaderOnly)
+		if(bHeaderOnly)
 		{
 			Reader->Close();
 			return vlTrue;
 		}
 
 		// New vtf version support.
-		if (this->Header->ImageFormat == IMAGE_FORMAT_ATI_DST16)
+		if(this->Header->ImageFormat == IMAGE_FORMAT_ATI_DST16)
 		{
 			this->Header->ImageFormat = IMAGE_FORMAT_ATI2N;
 		}
 
-		if (this->Header->ImageFormat == IMAGE_FORMAT_ATI_DST24)
+		if(this->Header->ImageFormat == IMAGE_FORMAT_ATI_DST24)
 		{
 			this->Header->ImageFormat = IMAGE_FORMAT_ATI1N;
 		}
@@ -987,7 +987,7 @@ vlBool CVTFFile::Load(IO::Readers::IReader* Reader, vlBool bHeaderOnly)
 		// work out how big out buffers need to be
 		this->uiImageBufferSize = this->ComputeImageSize(this->Header->Width, this->Header->Height, this->Header->Depth, this->Header->MipCount, this->Header->ImageFormat) * this->GetFaceCount() * this->GetFrameCount();
 
-		if (this->Header->LowResImageFormat != IMAGE_FORMAT_NONE)
+		if(this->Header->LowResImageFormat != IMAGE_FORMAT_NONE)
 		{
 			this->uiThumbnailBufferSize = this->ComputeImageSize(this->Header->LowResImageWidth, this->Header->LowResImageHeight, 1, this->Header->LowResImageFormat);
 		}
@@ -998,25 +998,25 @@ vlBool CVTFFile::Load(IO::Readers::IReader* Reader, vlBool bHeaderOnly)
 
 		// read the resource directory if version > 7.3
 		vlUInt uiThumbnailBufferOffset = 0, uiImageDataOffset = 0;
-		if (this->Header->ResourceCount)
+		if(this->Header->ResourceCount)
 		{
-			if (this->Header->ResourceCount > VTF_RSRC_MAX_DICTIONARY_ENTRIES)
+			if(this->Header->ResourceCount > VTF_RSRC_MAX_DICTIONARY_ENTRIES)
 			{
 				LastError.SetFormatted("File may be corrupt; directory length %u exceeds maximum dictionary length of %u.", this->Header->ResourceCount, VTF_RSRC_MAX_DICTIONARY_ENTRIES);
 				throw 0;
 			}
 
-			for (vlUInt i = 0; i < this->Header->ResourceCount; i++)
+			for(vlUInt i = 0; i < this->Header->ResourceCount; i++)
 			{
-				switch (this->Header->Resources[i].Type)
+				switch(this->Header->Resources[i].Type)
 				{
 				case VTF_LEGACY_RSRC_LOW_RES_IMAGE:
-					if (this->Header->LowResImageFormat == IMAGE_FORMAT_NONE)
+					if(this->Header->LowResImageFormat == IMAGE_FORMAT_NONE)
 					{
 						LastError.Set("File may be corrupt; unexpected low resolution image directory entry.");
 						throw 0;
 					}
-					if (uiThumbnailBufferOffset != 0)
+					if(uiThumbnailBufferOffset != 0)
 					{
 						LastError.Set("File may be corrupt; multiple low resolution image directory entries.");
 						throw 0;
@@ -1024,7 +1024,7 @@ vlBool CVTFFile::Load(IO::Readers::IReader* Reader, vlBool bHeaderOnly)
 					uiThumbnailBufferOffset = this->Header->Resources[i].Data;
 					break;
 				case VTF_LEGACY_RSRC_IMAGE:
-					if (uiImageDataOffset != 0)
+					if(uiImageDataOffset != 0)
 					{
 						LastError.Set("File may be corrupt; multiple image directory entries.");
 						throw 0;
@@ -1032,9 +1032,9 @@ vlBool CVTFFile::Load(IO::Readers::IReader* Reader, vlBool bHeaderOnly)
 					uiImageDataOffset = this->Header->Resources[i].Data;
 					break;
 				default:
-					if ((this->Header->Resources[i].Flags & RSRCF_HAS_NO_DATA_CHUNK) == 0)
+					if((this->Header->Resources[i].Flags & RSRCF_HAS_NO_DATA_CHUNK) == 0)
 					{
-						if (this->Header->Resources[i].Data + sizeof(vlUInt) > uiFileSize)
+						if(this->Header->Resources[i].Data + sizeof(vlUInt) > uiFileSize)
 						{
 							LastError.Set("File may be corrupt; file to small for it's resource data.");
 							throw 0;
@@ -1042,12 +1042,12 @@ vlBool CVTFFile::Load(IO::Readers::IReader* Reader, vlBool bHeaderOnly)
 
 						vlUInt uiSize = 0;
 						Reader->Seek(this->Header->Resources[i].Data, FILE_BEGIN);
-						if (Reader->Read(&uiSize, sizeof(vlUInt)) != sizeof(vlUInt))
+						if(Reader->Read(&uiSize, sizeof(vlUInt)) != sizeof(vlUInt))
 						{
 							throw 0;
 						}
 
-						if (this->Header->Resources[i].Data + sizeof(vlUInt) + uiSize > uiFileSize)
+						if(this->Header->Resources[i].Data + sizeof(vlUInt) + uiSize > uiFileSize)
 						{
 							LastError.Set("File may be corrupt; file to small for it's resource data.");
 							throw 0;
@@ -1055,7 +1055,7 @@ vlBool CVTFFile::Load(IO::Readers::IReader* Reader, vlBool bHeaderOnly)
 
 						this->Header->Data[i].Size = uiSize;
 						this->Header->Data[i].Data = new vlByte[uiSize];
-						if (Reader->Read(this->Header->Data[i].Data, uiSize) != uiSize)
+						if(Reader->Read(this->Header->Data[i].Data, uiSize) != uiSize)
 						{
 							throw 0;
 						}
@@ -1072,36 +1072,36 @@ vlBool CVTFFile::Load(IO::Readers::IReader* Reader, vlBool bHeaderOnly)
 
 		// sanity check
 		// headersize + lowbuffersize + buffersize *should* equal the filesize
-		if (this->Header->HeaderSize > uiFileSize || uiThumbnailBufferOffset + this->uiThumbnailBufferSize > uiFileSize || uiImageDataOffset + this->uiImageBufferSize > uiFileSize)
+		if(this->Header->HeaderSize > uiFileSize || uiThumbnailBufferOffset + this->uiThumbnailBufferSize > uiFileSize || uiImageDataOffset + this->uiImageBufferSize > uiFileSize)
 		{
 			LastError.Set("File may be corrupt; file to small for it's image data.");
 			throw 0;
 		}
 
-		if (uiThumbnailBufferOffset == 0)
+		if(uiThumbnailBufferOffset == 0)
 		{
 			this->Header->LowResImageFormat = IMAGE_FORMAT_NONE;
 		}
 
 		// assuming all is well, size our data buffers
-		if (this->Header->LowResImageFormat != IMAGE_FORMAT_NONE)
+		if(this->Header->LowResImageFormat != IMAGE_FORMAT_NONE)
 		{
 			this->lpThumbnailImageData = new vlByte[this->uiThumbnailBufferSize];
 
 			// load the low res data
 			Reader->Seek(uiThumbnailBufferOffset, FILE_BEGIN);
-			if (Reader->Read(this->lpThumbnailImageData, this->uiThumbnailBufferSize) != this->uiThumbnailBufferSize)
+			if(Reader->Read(this->lpThumbnailImageData, this->uiThumbnailBufferSize) != this->uiThumbnailBufferSize)
 			{
 				throw 0;
 			}
 		}
 
-		if (uiImageDataOffset == 0)
+		if(uiImageDataOffset == 0)
 		{
 			this->Header->ImageFormat = IMAGE_FORMAT_NONE;
 		}
 
-		if (this->Header->ImageFormat != IMAGE_FORMAT_NONE)
+		if(this->Header->ImageFormat != IMAGE_FORMAT_NONE)
 		{
 			this->lpImageData = new vlByte[this->uiImageBufferSize];
 
@@ -1153,12 +1153,12 @@ vlBool CVTFFile::Save(IO::Writers::IWriter *Writer) const
 		tagVTFImageFormat fmt = this->Header->ImageFormat;
 
 		// Old version VTF support.
-		if (fmt == IMAGE_FORMAT_ATI_DST16 && this->Header->Version[1] < VTF_MINOR_VERSION)
+		if(fmt == IMAGE_FORMAT_ATI_DST16 && this->Header->Version[1] < VTF_MINOR_VERSION)
 		{
 			this->Header->ImageFormat = IMAGE_FORMAT_ATI2N;
 		}
 
-		if (fmt == IMAGE_FORMAT_ATI_DST24 && this->Header->Version[1] < VTF_MINOR_VERSION)
+		if(fmt == IMAGE_FORMAT_ATI_DST24 && this->Header->Version[1] < VTF_MINOR_VERSION)
 		{
 			this->Header->ImageFormat = IMAGE_FORMAT_ATI1N;
 		}
@@ -1166,13 +1166,13 @@ vlBool CVTFFile::Save(IO::Writers::IWriter *Writer) const
 		bool ati = false;
 
 		// New version VTF support.
-		if (fmt == IMAGE_FORMAT_ATI2N && this->Header->Version[1] >= VTF_MINOR_VERSION)
+		if(fmt == IMAGE_FORMAT_ATI2N && this->Header->Version[1] >= VTF_MINOR_VERSION)
 		{
 			this->Header->ImageFormat = IMAGE_FORMAT_ATI_DST16;
 			ati = true;
 		}
 
-		if (fmt == IMAGE_FORMAT_ATI1N && this->Header->Version[1] >= VTF_MINOR_VERSION)
+		if(fmt == IMAGE_FORMAT_ATI1N && this->Header->Version[1] >= VTF_MINOR_VERSION)
 		{
 			this->Header->ImageFormat = IMAGE_FORMAT_ATI_DST24;
 			ati = true;
@@ -3498,10 +3498,10 @@ vlBool CVTFFile::Convert(vlByte *lpSource, vlByte *lpDest, vlUInt uiWidth, vlUIn
 		if(bResult)
 		{
 			// Make .z layer as white for ATI2N.
-			if (SourceFormat == IMAGE_FORMAT_ATI2N)
+			if(SourceFormat == IMAGE_FORMAT_ATI2N)
 			{
 				vlByte* pDest = lpSourceRGBA;
-				for (vlUInt i = 0; i < uiWidth * uiHeight; i++)
+				for(vlUInt i = 0; i < uiWidth * uiHeight; i++)
 				{
 					pDest[2] = 255;
 					pDest += 4;
@@ -3509,10 +3509,10 @@ vlBool CVTFFile::Convert(vlByte *lpSource, vlByte *lpDest, vlUInt uiWidth, vlUIn
 			}
 
 			// Make .yz layers as black for ATI1N.
-			if (SourceFormat == IMAGE_FORMAT_ATI1N)
+			if(SourceFormat == IMAGE_FORMAT_ATI1N)
 			{
 				vlByte* pDest = lpSourceRGBA;
-				for (vlUInt i = 0; i < uiWidth * uiHeight; i++)
+				for(vlUInt i = 0; i < uiWidth * uiHeight; i++)
 				{
 					pDest[1] = 0;
 					pDest[2] = 0;
