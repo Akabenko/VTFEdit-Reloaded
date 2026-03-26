@@ -2644,8 +2644,8 @@ static SVTFImageFormatInfo VTFImageFormatInfo[] =
 	{ "ATI DST16",			 16,  2,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_ATI_DST16
 	{ "ATI DST24",			 24,  3,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_ATI_DST24
 	{ "nVidia NULL",		 32,  4,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_NV_NULL
-	{ "ATI1N",				  4,  0,  0,  0,  0,  0,  vlTrue,  vlTrue },		// IMAGE_FORMAT_ATI1N
 	{ "ATI2N",				  8,  0,  0,  0,  0,  0,  vlTrue,  vlTrue },		// IMAGE_FORMAT_ATI2N
+	{ "ATI1N",				  4,  0,  0,  0,  0,  0,  vlTrue,  vlTrue },		// IMAGE_FORMAT_ATI1N
 	{ "HDR_BGRA8888",		 32,  4,  8,  8,  8,  8, vlFalse,  vlTrue }			// IMAGE_FORMAT_BGRA8888
 	/*
 	{ "Xbox360 DST16",		 16,  0,  0,  0,  0,  0, vlFalse,  vlTrue },		// IMAGE_FORMAT_X360_DST16
@@ -3154,8 +3154,8 @@ static SVTFImageConvertInfo VTFImageConvertInfo[] =
 	{	 16,  2, 16,  0,  0,  0,	 0,	-1,	-1,	-1, vlFalse,  vlTrue,	NULL,	NULL,		IMAGE_FORMAT_ATI_DST16},
 	{	 24,  3, 24,  0,  0,  0,	 0,	-1,	-1,	-1, vlFalse,  vlTrue,	NULL,	NULL,		IMAGE_FORMAT_ATI_DST24},
 	{	 32,  4,  0,  0,  0,  0,	-1,	-1,	-1,	-1, vlFalse, vlFalse,	NULL,	NULL,		IMAGE_FORMAT_NV_NULL},
-	{	  4,  0,  0,  0,  0,  0,	-1, -1, -1, -1,  vlTrue, vlTrue,	NULL,	NULL,		IMAGE_FORMAT_ATI1N},
 	{     8,  0,  0,  0,  0,  0,	-1, -1, -1, -1,  vlTrue, vlTrue,	NULL,	NULL,		IMAGE_FORMAT_ATI2N},
+	{	  4,  0,  0,  0,  0,  0,	-1, -1, -1, -1,  vlTrue, vlTrue,	NULL,	NULL,		IMAGE_FORMAT_ATI1N},
 	{ 	 32,  4,  8,  8,  8,  8,	 2,	 1,	 0,	 3, vlFalse,  vlTrue,	NULL,	NULL,		IMAGE_FORMAT_HDR_BGRA8888},/*,
 	{	 16,  2, 16,  0,  0,  0,	 0, -1, -1, -1, vlFalse,  vlTrue,	NULL,	NULL,		IMAGE_FORMAT_X360_DST16},
 	{	 24,  3, 24,  0,  0,  0,	 0, -1, -1, -1, vlFalse,  vlTrue,	NULL,	NULL,		IMAGE_FORMAT_X360_DST24},
